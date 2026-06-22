@@ -64,9 +64,13 @@ export function Navbar() {
           <button aria-label="Wishlist" className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid">
             <Heart size={18} />
           </button>
-          <button aria-label="Masuk" className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid">
+          <Link
+            to={authed ? "/akun" : "/auth"}
+            aria-label={authed ? "Akun saya" : "Masuk"}
+            className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid"
+          >
             <User size={18} />
-          </button>
+          </Link>
           <button aria-label="Keranjang" className="relative grid h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink">
             <ShoppingBag size={18} />
             <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-pitch text-[10px] font-bold text-white">2</span>
