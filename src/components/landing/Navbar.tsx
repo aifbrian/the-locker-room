@@ -36,14 +36,14 @@ export function Navbar() {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-6 lg:h-20">
-        <a href="#" className="flex items-center gap-2 shrink-0" aria-label="The Locker Room">
+        <Link to="/" className="flex items-center gap-2 shrink-0" aria-label="The Locker Room">
           <span className="grid h-9 w-9 place-items-center rounded-md bg-ink text-white">
             <span className="font-display text-base font-extrabold">TLR</span>
           </span>
           <span className="hidden font-display text-[15px] font-extrabold tracking-tight text-ink sm:inline">
             THE LOCKER ROOM
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Utama">
           {MENU.map((m) => (
