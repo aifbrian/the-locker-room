@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, Heart, ShoppingBag, User, Menu, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 
 const MENU = [
   "Beranda", "Shop", "Liga", "Klub", "Vintage", "New Arrival", "Sale", "Blog", "Tentang",
