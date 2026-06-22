@@ -1,63 +1,65 @@
-# The Locker Room — Premium Landing Page
 
-A single-route landing page in Indonesian for an original football jersey store, built with Swiss Design discipline: asymmetric modular grid, dominant whitespace, typography-led hierarchy, white background with football-green and gold accents.
+# The Locker Room — Full E-Commerce Web Application
 
-## Scope
+Skala PRD ini sangat besar. Saya akan kerjakan di Lovable (TanStack Start + Lovable Cloud / Postgres + Auth + Storage + Server Functions), bukan Next.js/Laravel/MySQL — fitur, alur, dan tampilannya tetap sama. Eksekusi dipecah ke 6 fase agar tiap iterasi tetap stabil dan dapat di-review. Landing page yang sudah ada dipakai sebagai homepage.
 
-- One route: `/` (replace placeholder in `src/routes/index.tsx`)
-- Static marketing page only — no cart, auth, or backend
-- All copy in Bahasa Indonesia per the brief
-- Fully responsive, mobile-first, WCAG AA, semantic HTML, SEO meta on the route
+## Fase 0 — Pondasi (1 iterasi)
+- Enable Lovable Cloud (Auth + DB + Storage + Server Functions).
+- Aktifkan koneksi RajaOngkir/Biteship (saya akan minta API key lewat add_secret pada saat dibutuhkan).
+- Buat bucket storage: `product-images`, `payment-proofs` (private), `banners`, `blog`.
+- Layout app: `_authenticated/` untuk area customer login, `_admin/` (role-gated) untuk admin, header/footer global, toaster, react-query.
+- Role system: `app_role` enum (`admin`, `staff`, `customer`), tabel `user_roles`, fungsi `has_role()`, RLS via security definer.
 
-## Design System (src/styles.css)
+## Fase 1 — Database & Auth
+Skema utama (semua dengan RLS + GRANT eksplisit, soft delete, timestamps, audit log):
+`profiles, addresses, leagues, clubs, countries, brands, seasons, players, categories, products, product_variants (size/stock/SKU), product_images, product_videos, wishlists, carts, cart_items, vouchers, voucher_redemptions, orders, order_items, order_status_history, payments (bukti transfer), shipments (kurir, resi, tracking events), reviews, banners, blog_posts, blog_categories, store_settings, bank_accounts, couriers, courier_services, audit_logs, notifications`.
+Status order enum sesuai PRD (Pending Payment → Returned). Order number auto: `TLR-YYYYMMDD-XXXXXX` via DB trigger.
 
-Tokens added via `@theme` + `:root` (oklch):
-- `--pitch` Football Green `#1E7A3A`
-- `--pitch-deep` Dark Green `#14532D`
-- `--pitch-mist` Light Green `#DCFCE7`
-- `--ink` `#111827`, `--bone` `#F5F5F5`, `--gold` `#D4AF37`
-- Background pure white; green used as accent only
-- Type scale: hero 72–88, h2 48–64, h3 28–36, body 18–20, caption 14–16
-- Font: Manrope (display + body, weights 300–700), loaded via `<link>` in `__root.tsx` head
-- 12-col grid, max container 1320px, section padding 120px (64px on mobile), gap 32px, radius 16–20px
-- Decorative hairline pitch-lines as SVG background accents
+## Fase 2 — Customer: Catalog & Product
+- `/shop` grid + pagination + sort (terbaru, terlaris, harga, A-Z) + filter (liga, klub, negara, musim, brand, ukuran, player, harga, vintage, limited, availability), search realtime (debounced server fn).
+- `/product/$slug`: gallery + zoom + video, varian ukuran, size guide, deskripsi, material, patch/sponsor, related, review, FAQ, wishlist, share, Add to Cart, Buy Now, JSON-LD Product.
+- Wishlist (auth) + cart (auth & guest via localStorage merge saat login).
 
-## Sections (in order)
+## Fase 3 — Customer: Checkout, Payment, Tracking
+- Cart page (CRUD qty, voucher, estimasi ongkir, ringkasan).
+- Checkout 1-page: data penerima, alamat (provinsi/kota/kecamatan dari API ongkir), kurir+layanan (ongkir realtime via server fn → RajaOngkir/Biteship), metode bank, ringkasan, T&C.
+- Submit → buat order (status Pending Payment) → halaman instruksi pembayaran: rekening, jumlah, countdown, upload bukti transfer (validasi tipe+ukuran, simpan ke storage private), status menjadi Waiting Verification.
+- `/tracking/$orderNumber` + `/akun/orders/$id`: timeline status visual, resi, kurir, ETA, riwayat.
+- Email notifikasi via Lovable AI Gateway / Resend connector (order dibuat, bukti diterima, pembayaran diverifikasi, dikirim + resi, selesai).
 
-1. **Announcement bar** — green, single line, dismissible on desktop
-2. **Sticky navbar** — transparent on top, solid white + hairline shadow on scroll; logo, menu (Beranda, Shop, Liga, Klub, Vintage, New Arrival, Sale, Blog, Tentang), icons (search, wishlist, cart, masuk), primary CTA
-3. **Hero** — 2-col asymmetric; left: oversized headline "Home of Authentic Football Jerseys.", subheadline, primary + secondary CTA, social proof line; right: hero jersey image with floating trust badges, hairline pitch grid behind
-4. **Brand trust strip** — monochrome wordmarks (Nike, Adidas, Puma, New Balance, Mizuno, Umbro, Kappa, Hummel)
-5. **Featured Categories** — modular grid of 8 large category cards (Premier League, La Liga, Serie A, Bundesliga, UCL, Tim Nasional, Vintage, Retro) with hover zoom + green overlay
-6. **Best Sellers** — 4-product grid; each card: image, name, season, price + strikethrough, badges (Best Seller, Original), wishlist + quick-view icons, add-to-cart CTA
-7. **Vintage Collection** — editorial split: large image left, headline + paragraph + CTA right
-8. **Shop by Club** — circular logos grid (Man Utd, Liverpool, Chelsea, Arsenal, Barça, Real Madrid, Juventus, Inter, Milan, Bayern, PSG, Ajax, Dortmund, Tottenham)
-9. **Shop by National Team** — circular flag/crest grid (Argentina, Brazil, France, England, Germany, Spain, Portugal, Italy, Japan, Indonesia)
-10. **Why Choose The Locker Room** — 4 Swiss-grid cards (100% Original, Garansi Keaslian, Pengiriman Cepat, Belanja Aman)
-11. **Customer Reviews** — 4.9/5 rating header + 3 testimonial cards with customer photo, jersey photo, Verified Purchase chip
-12. **Instagram Gallery** — 6-image grid, hover zoom
-13. **Newsletter** — green band, headline, subheadline, email input + Berlangganan CTA
-14. **Final CTA** — centered headline + dual CTAs
-15. **Footer** — multi-column: brand, shop links, payment methods (QRIS, VA, Transfer Bank, E-Wallet), couriers (JNE, J&T, SiCepat, POS, Ninja), socials, copyright
+## Fase 4 — Customer: My Account
+Dashboard, profil, alamat (CRUD), wishlist, daftar pesanan + invoice (PDF render via react-pdf di server fn), tracking, riwayat, pengaturan, ubah password, logout.
 
-## Interactions
+## Fase 5 — Admin Panel (`/_admin`, gated `has_role('admin')`)
+- Dashboard: KPI cards, grafik penjualan, top produk, recent orders, low stock.
+- Produk: CRUD lengkap + varian + multi-foto/video, SKU auto, featured/bestseller/vintage/limited/sale, draft/publish, import CSV, bulk action.
+- Master data: kategori, liga, klub, negara, brand, season, player, kurir, rekening bank.
+- Pesanan: list/filter/search, detail, lihat & zoom bukti transfer, approve/reject pembayaran (alasan), catatan admin, generate invoice, input resi+kurir, update status (packing/ship/deliver/cancel/refund/return) → trigger email + status_history.
+- Inventory: stock, mutasi, history, low-stock alert, adjustment.
+- Customer: list, riwayat belanja, alamat, suspend.
+- Banner, Voucher (% / nominal, min belanja, kuota, masa berlaku), Review moderation, Blog CMS (rich text, SEO, draft/publish).
+- Reports: penjualan/produk/customer/revenue, filter tanggal, export CSV/Excel/PDF.
+- Settings toko: profil, logo, kontak, alamat, rekening, kurir, email, SEO, sosmed, footer.
 
-- 300ms transitions; image hover zoom; button lift 2px; subtle shadow
-- Scroll reveal (fade + slide-up) via IntersectionObserver hook
-- Light parallax on hero image
-- Sticky mobile CTA bar (Belanja Sekarang)
-- Full focus rings, keyboard nav, lazy-loaded imagery
+## Fase 6 — Polish
+SEO (sitemap.xml dinamis, robots, OG per route, schema.org Product/BreadcrumbList/Organization), performance (image WebP/AVIF via vite-imagetools, lazy load, code split, preload LCP), accessibility (WCAG AA, focus ring, ARIA, kontras), UX states (skeleton, empty, error, konfirmasi delete, success animation), security audit (RLS review, rate limit di server fn sensitif, validasi Zod, secure upload), responsive QA.
 
-## Technical notes
+## Detail teknis penting
+- **Stack**: TanStack Start + React 19 + TS + Tailwind v4 + shadcn + TanStack Query + React Hook Form + Zod. Server logic via `createServerFn` (RLS as user) + `requireSupabaseAuth`; admin actions cek `has_role` lalu pakai `supabaseAdmin` di dalam handler.
+- **Ongkir**: server fn `calculate_shipping` panggil RajaOngkir/Biteship dengan API key dari secret; cache provinsi/kota/kecamatan di tabel `regions`.
+- **Pembayaran manual**: tabel `payments` (order_id, bank, jumlah, proof_url, status, verified_by, verified_at, reject_reason). Bucket `payment-proofs` private — admin akses lewat signed URL.
+- **Order number**: sequence harian via trigger PL/pgSQL.
+- **Audit log**: trigger insert ke `audit_logs` untuk tabel kritikal (orders, payments, products, user_roles).
+- **Email**: Resend connector (akan diminta saat fase 3); template Indonesia.
+- **Identitas visual**: melanjutkan Swiss design + token warna pitch green/gold yang sudah ada di `src/styles.css`.
 
-- Componentize sections under `src/components/landing/` (AnnouncementBar, Navbar, Hero, BrandStrip, Categories, BestSellers, Vintage, Clubs, NationalTeams, WhyUs, Reviews, InstagramGrid, Newsletter, FinalCTA, Footer)
-- One reusable `SectionHeader` + `Reveal` wrapper
-- Route `head()` updated: title "The Locker Room — Jersey Bola Original", description, og:title, og:description, og:type, og:image (hero), twitter card
-- Single `<main>` in index route; one `<h1>` in hero
-- Imagery via `imagegen` (premium tier where text is on-image): hero jersey scene, 8 category covers, 4 best-seller jerseys, vintage editorial, 6 instagram tiles; brand wordmarks + club crests as inline SVG placeholders (text marks) to avoid trademark image issues
-- Tailwind v4 tokens only — no hardcoded color classes in components
+## Yang saya butuhkan dari Anda (di fase terkait, bukan sekarang)
+1. Konfirmasi enable Lovable Cloud saat fase 0 dimulai.
+2. API key RajaOngkir atau Biteship (fase 3).
+3. Resend API key + verified sender domain (fase 3) — atau pakai default Lovable email.
+4. Daftar rekening bank toko + info toko (alamat, kontak, sosmed) untuk seed `store_settings` & `bank_accounts`.
 
-## Out of scope
+## Cara saya akan jalankan
+Setelah plan disetujui, saya kerjakan fase 0 + 1 di iterasi pertama (Cloud + skema DB + role + layout admin/customer). Anda review, lalu saya lanjut fase 2 dst. Tiap fase = 1–2 pesan agar saya bisa verifikasi build & RLS sebelum lanjut. Jangan minta semua fase dalam satu pesan — risiko build break dan susah di-review tinggi.
 
-- Cart, checkout, product detail pages, search functionality, auth, CMS, Lovable Cloud
-- Real brand logos / club crests as raster images (use neutral text wordmarks / monogram circles)
+Setuju mulai dari Fase 0 + 1?

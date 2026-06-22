@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, Heart, ShoppingBag, User, Menu, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 
 const MENU = [
   "Beranda", "Shop", "Liga", "Klub", "Vintage", "New Arrival", "Sale", "Blog", "Tentang",
@@ -8,6 +10,15 @@ const MENU = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAuthed(!!session);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -25,14 +36,14 @@ export function Navbar() {
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-6 lg:h-20">
-        <a href="#" className="flex items-center gap-2 shrink-0" aria-label="The Locker Room">
+        <Link to="/" className="flex items-center gap-2 shrink-0" aria-label="The Locker Room">
           <span className="grid h-9 w-9 place-items-center rounded-md bg-ink text-white">
             <span className="font-display text-base font-extrabold">TLR</span>
           </span>
           <span className="hidden font-display text-[15px] font-extrabold tracking-tight text-ink sm:inline">
             THE LOCKER ROOM
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Utama">
           {MENU.map((m) => (
@@ -53,9 +64,13 @@ export function Navbar() {
           <button aria-label="Wishlist" className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid">
             <Heart size={18} />
           </button>
-          <button aria-label="Masuk" className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid">
+          <Link
+            to={authed ? "/akun" : "/auth"}
+            aria-label={authed ? "Akun saya" : "Masuk"}
+            className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid"
+          >
             <User size={18} />
-          </button>
+          </Link>
           <button aria-label="Keranjang" className="relative grid h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink">
             <ShoppingBag size={18} />
             <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-pitch text-[10px] font-bold text-white">2</span>
