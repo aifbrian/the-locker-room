@@ -141,18 +141,16 @@ function AdminDashboard() {
               Modul-modul ini akan dibangun pada fase berikutnya.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                to="/admin/products"
+              <a
+                href="/admin/products"
                 className="inline-flex h-10 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white hover:bg-pitch"
               >
                 Kelola Produk
-              </Link>
-              <Link
-                to="/admin/orders"
+              </a>
+              <a
+                href="/admin/orders"
                 className="inline-flex h-10 items-center rounded-full border border-border bg-white px-5 text-sm font-semibold text-ink hover:bg-bone"
-              >
-                Lihat Pesanan
-              </Link>
+              </a>
             </div>
           </section>
         </main>
