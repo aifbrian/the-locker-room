@@ -1,74 +1,65 @@
-# The Locker Room — Full E-Commerce Web Application
 
-Skala PRD ini sangat besar. Saya akan kerjakan di Lovable (TanStack Start + Lovable Cloud / Postgres + Auth + Storage + Server Functions), bukan Next.js/Laravel/MySQL — fitur, alur, dan tampilannya tetap sama. Eksekusi dipecah ke 6 fase agar tiap iterasi tetap stabil dan dapat di-review. Landing page yang sudah ada dipakai sebagai homepage.
+## Konteks
 
-## Fase 0 — Pondasi (1 iterasi)
+Landing page, database (30+ tabel + RLS + storage), Auth (email + Google), route shell `_authenticated` dan `_admin` sudah selesai di Phase 0–1. Rencana ini melanjutkan ke fitur produk hingga admin panel, memakai stack Lovable (TanStack Start + Supabase + Tailwind v4 + shadcn), bukan Next.js/Laravel — agar tetap satu codebase yang production-ready.
 
-- Enable Lovable Cloud (Auth + DB + Storage + Server Functions).
-- Aktifkan koneksi RajaOngkir/Biteship (saya akan minta API key lewat add_secret pada saat dibutuhkan).
-- Buat bucket storage: `product-images`, `payment-proofs` (private), `banners`, `blog`.
-- Layout app: `_authenticated/` untuk area customer login, `_admin/` (role-gated) untuk admin, header/footer global, toaster, react-query.
-- Role system: `app_role` enum (`admin`, `staff`, `customer`), tabel `user_roles`, fungsi `has_role()`, RLS via security definer.
+## Phase 2 — Katalog & Produk (Customer)
 
-## Fase 1 — Database & Auth
+- Server functions publik (publishable client + policy `TO anon`) untuk listing & detail produk:
+  - `listProducts({ filters, sort, page })` — filter liga, klub, negara, brand, musim, ukuran, player, harga, vintage, limited, availability; sort terbaru/terlaris/harga/A-Z.
+  - `getProductBySlug(slug)` + related products.
+  - `listFacets()` untuk sidebar filter dinamis.
+- Routes:
+  - `/shop` — grid + sidebar filter, sort dropdown, pagination, search realtime (debounce), skeleton & empty state.
+  - `/produk/$slug` — gallery + zoom, video, varian ukuran, stok, harga & diskon, deskripsi, material, patch/sponsor/player, authenticity, review, FAQ, related, tombol Wishlist / Add to Cart / Buy Now.
+  - `/koleksi/$type/$slug` — landing per liga/klub/brand/musim (SEO).
+- SEO per route: title, description, OG, canonical, JSON-LD Product.
 
-Skema utama (semua dengan RLS + GRANT eksplisit, soft delete, timestamps, audit log):
-`profiles, addresses, leagues, clubs, countries, brands, seasons, players, categories, products, product_variants (size/stock/SKU), product_images, product_videos, wishlists, carts, cart_items, vouchers, voucher_redemptions, orders, order_items, order_status_history, payments (bukti transfer), shipments (kurir, resi, tracking events), reviews, banners, blog_posts, blog_categories, store_settings, bank_accounts, couriers, courier_services, audit_logs, notifications`.
-Status order enum sesuai PRD (Pending Payment → Returned). Order number auto: `TLR-YYYYMMDD-XXXXXX` via DB trigger.
+## Phase 3 — Wishlist, Cart, Checkout, Pembayaran
 
-## Fase 2 — Customer: Catalog & Product
+- Wishlist: server fn auth (`requireSupabaseAuth`) add/remove/move-to-cart, halaman `/akun/wishlist`.
+- Cart: server fn CRUD `cart_items`, halaman `/keranjang` (qty, hapus, voucher via `lookup_voucher`, estimasi ongkir, ringkasan).
+- Checkout `/checkout`:
+  - Form penerima + alamat (Provinsi/Kota/Kecamatan/Kodepos) pakai React Hook Form + Zod.
+  - Pilih kurir & layanan via integrasi shipping (Biteship/RajaOngkir) — server route `/api/public/shipping/rates` proxy aman dengan secret `SHIPPING_API_KEY` (akan diminta lewat add_secret).
+  - Pilih bank tujuan (dari `bank_accounts`).
+  - Submit → server fn `createOrder` (generate `TLR-YYYYMMDD-XXXXXX`, status `pending_payment`, kurangi stok di transaction, simpan snapshot harga).
+- `/pesanan/$orderNumber/pembayaran`: instruksi transfer, countdown, upload bukti ke bucket `payment-proofs` (validasi tipe/size), status → `waiting_verification`.
+- `/pesanan/$orderNumber`: tracking timeline (dari `order_status_history` + `shipment_events`), nomor resi, kurir, estimasi.
 
-- `/shop` grid + pagination + sort (terbaru, terlaris, harga, A-Z) + filter (liga, klub, negara, musim, brand, ukuran, player, harga, vintage, limited, availability), search realtime (debounced server fn).
-- `/product/$slug`: gallery + zoom + video, varian ukuran, size guide, deskripsi, material, patch/sponsor, related, review, FAQ, wishlist, share, Add to Cart, Buy Now, JSON-LD Product.
-- Wishlist (auth) + cart (auth & guest via localStorage merge saat login).
+## Phase 4 — Akun Customer
 
-## Fase 3 — Customer: Checkout, Payment, Tracking
+`/akun` dashboard ringkas, sub-route: profil, alamat (CRUD), wishlist, pesanan (list + detail + invoice cetak), ubah password, logout. Semua via server fn auth.
 
-- Cart page (CRUD qty, voucher, estimasi ongkir, ringkasan).
-- Checkout 1-page: data penerima, alamat (provinsi/kota/kecamatan dari API ongkir), kurir+layanan (ongkir realtime via server fn → RajaOngkir/Biteship), metode bank, ringkasan, T&C.
-- Submit → buat order (status Pending Payment) → halaman instruksi pembayaran: rekening, jumlah, countdown, upload bukti transfer (validasi tipe+ukuran, simpan ke storage private), status menjadi Waiting Verification.
-- `/tracking/$orderNumber` + `/akun/orders/$id`: timeline status visual, resi, kurir, ETA, riwayat.
-- Email notifikasi via Lovable AI Gateway / Resend connector (order dibuat, bukti diterima, pembayaran diverifikasi, dikirim + resi, selesai).
+## Phase 5 — Admin Panel (`/_admin`, role admin/staff)
 
-## Fase 4 — Customer: My Account
+- Layout: sidebar shadcn collapsible, header dengan trigger.
+- Dashboard: KPI (penjualan, order, pending, revenue, customer baru, low stock), chart penjualan & top produk, recent orders, low stock list.
+- Produk: CRUD produk + varian + gambar (upload `product-images`) + video, SKU otomatis, status (featured/best/vintage/limited/sale/publish/draft), bulk delete, import CSV.
+- Master data: kategori, liga, klub, negara, brand, musim, player, ukuran, kurir & layanan.
+- Pesanan: list + filter/search, detail, lihat & zoom bukti transfer, approve/reject pembayaran (catatan admin), input resi & kurir, update status (packing/shipping/delivered/cancelled/refund/return), generate invoice PDF, trigger notifikasi.
+- Inventory: stok per varian, mutasi/adjustment, history, alert low/out of stock.
+- Customer: list, riwayat belanja, alamat, suspend (role).
+- Banner, Voucher, Review moderation, Blog CMS (rich text), Reports (export CSV/Excel/PDF, filter tanggal), Settings toko (logo, kontak, alamat, rekening, SEO, sosial).
+- Semua mutasi admin via server fn dengan guard `has_role('admin'|'staff')` + audit log ke `audit_logs`.
 
-Dashboard, profil, alamat (CRUD), wishlist, daftar pesanan + invoice (PDF render via react-pdf di server fn), tracking, riwayat, pengaturan, ubah password, logout.
+## Phase 6 — Performa, SEO, Aksesibilitas, Polish
 
-## Fase 5 — Admin Panel (`/_admin`, gated `has_role('admin')`)
+- Lazy load gambar, format WebP/AVIF, skeletons, code splitting per route.
+- SEO: sitemap.xml dinamis (route `/api/public/sitemap.xml`), robots.txt, OG image per produk, schema Product/BreadcrumbList/Organization.
+- A11y: WCAG AA, fokus terlihat, ARIA, kontras.
+- Mobile-first untuk seluruh halaman; sticky header & sticky checkout summary.
+- Notifikasi: toast (sonner) + insert ke tabel `notifications`; email transaksional (opsional Resend) untuk status order.
+- Rate limit pada server route publik, validasi Zod di setiap input.
 
-- Dashboard: KPI cards, grafik penjualan, top produk, recent orders, low stock.
-- Produk: CRUD lengkap + varian + multi-foto/video, SKU auto, featured/bestseller/vintage/limited/sale, draft/publish, import CSV, bulk action.
-- Master data: kategori, liga, klub, negara, brand, season, player, kurir, rekening bank.
-- Pesanan: list/filter/search, detail, lihat & zoom bukti transfer, approve/reject pembayaran (alasan), catatan admin, generate invoice, input resi+kurir, update status (packing/ship/deliver/cancel/refund/return) → trigger email + status_history.
-- Inventory: stock, mutasi, history, low-stock alert, adjustment.
-- Customer: list, riwayat belanja, alamat, suspend.
-- Banner, Voucher (% / nominal, min belanja, kuota, masa berlaku), Review moderation, Blog CMS (rich text, SEO, draft/publish).
-- Reports: penjualan/produk/customer/revenue, filter tanggal, export CSV/Excel/PDF.
-- Settings toko: profil, logo, kontak, alamat, rekening, kurir, email, SEO, sosmed, footer.
+## Catatan Teknis
 
-## Fase 6 — Polish
+- Tetap di stack Lovable: TanStack Start + Supabase + Tailwind v4 + shadcn. Tidak memakai Next.js/Laravel/MySQL — Postgres + RLS sudah memenuhi requirement keamanan & relasional PRD.
+- Pembayaran: manual transfer + upload bukti (sesuai keputusan sebelumnya). QRIS disiapkan sebagai field opsional, belum diintegrasikan.
+- Shipping API: butuh secret (`BITESHIP_API_KEY` atau `RAJAONGKIR_API_KEY`) — akan diminta saat masuk Phase 3.
+- Setiap phase ditutup dengan smoke test alur kritikal (browse → cart → checkout → upload bukti → admin verify → resi → delivered).
 
-SEO (sitemap.xml dinamis, robots, OG per route, schema.org Product/BreadcrumbList/Organization), performance (image WebP/AVIF via vite-imagetools, lazy load, code split, preload LCP), accessibility (WCAG AA, focus ring, ARIA, kontras), UX states (skeleton, empty, error, konfirmasi delete, success animation), security audit (RLS review, rate limit di server fn sensitif, validasi Zod, secure upload), responsive QA.
+## Pertanyaan sebelum eksekusi
 
-## Detail teknis penting
-
-- **Stack**: TanStack Start + React 19 + TS + Tailwind v4 + shadcn + TanStack Query + React Hook Form + Zod. Server logic via `createServerFn` (RLS as user) + `requireSupabaseAuth`; admin actions cek `has_role` lalu pakai `supabaseAdmin` di dalam handler.
-- **Ongkir**: server fn `calculate_shipping` panggil RajaOngkir/Biteship dengan API key dari secret; cache provinsi/kota/kecamatan di tabel `regions`.
-- **Pembayaran manual**: tabel `payments` (order_id, bank, jumlah, proof_url, status, verified_by, verified_at, reject_reason). Bucket `payment-proofs` private — admin akses lewat signed URL.
-- **Order number**: sequence harian via trigger PL/pgSQL.
-- **Audit log**: trigger insert ke `audit_logs` untuk tabel kritikal (orders, payments, products, user_roles).
-- **Email**: Resend connector (akan diminta saat fase 3); template Indonesia.
-- **Identitas visual**: melanjutkan Swiss design + token warna pitch green/gold yang sudah ada di `src/styles.css`.
-
-## Yang saya butuhkan dari Anda (di fase terkait, bukan sekarang)
-
-1. Konfirmasi enable Lovable Cloud saat fase 0 dimulai.
-2. API key RajaOngkir atau Biteship (fase 3).
-3. Resend API key + verified sender domain (fase 3) — atau pakai default Lovable email.
-4. Daftar rekening bank toko + info toko (alamat, kontak, sosmed) untuk seed `store_settings` & `bank_accounts`.
-
-## Cara saya akan jalankan
-
-Setelah plan disetujui, saya kerjakan fase 0 + 1 di iterasi pertama (Cloud + skema DB + role + layout admin/customer). Anda review, lalu saya lanjut fase 2 dst. Tiap fase = 1–2 pesan agar saya bisa verifikasi build & RLS sebelum lanjut. Jangan minta semua fase dalam satu pesan — risiko build break dan susah di-review tinggi.
-
-Setuju mulai dari Fase 0 + 1?
+1. Pilih provider shipping: **Biteship** (rekomendasi, modern, banyak kurir) atau **RajaOngkir**?
+2. Mulai dari **Phase 2 (Katalog & Produk)** dulu, atau kerjakan Phase 2+3 sekaligus dalam satu batch besar?
