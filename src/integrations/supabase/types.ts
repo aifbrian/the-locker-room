@@ -1567,12 +1567,38 @@ export type Database = {
     Functions: {
       has_role: {
         Args: {
+<<<<<<< HEAD
           _role: Database["public"]["Enums"]["app_role"];
           _user_id: string;
         };
         Returns: boolean;
       };
     };
+=======
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      lookup_voucher: {
+        Args: { p_code: string }
+        Returns: {
+          active: boolean
+          code: string
+          description: string
+          id: string
+          max_discount: number
+          min_purchase: number
+          quota: number
+          type: string
+          used_count: number
+          valid_from: string
+          valid_until: string
+          value: number
+        }[]
+      }
+    }
+>>>>>>> 618ad1c2aea223a14ca5f00dabb62482f27ef4a7
     Enums: {
       app_role: "admin" | "staff" | "customer";
       order_status:
