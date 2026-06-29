@@ -1578,6 +1578,23 @@ export type Database = {
         }
         Returns: boolean
       }
+      lookup_voucher: {
+        Args: { p_code: string }
+        Returns: {
+          active: boolean
+          code: string
+          description: string
+          id: string
+          max_discount: number
+          min_purchase: number
+          quota: number
+          type: string
+          used_count: number
+          valid_from: string
+          valid_until: string
+          value: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "staff" | "customer"
