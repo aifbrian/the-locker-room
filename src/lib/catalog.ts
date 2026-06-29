@@ -49,10 +49,29 @@ export interface ProductListItem {
   brand_name: string | null;
 }
 
+async function resolveId<T extends string>(table: T, column: string, value: string) {
+  const { data } = await supabase
+    .from(table as never)
+    .select("id")
+    .eq(column, value)
+    .maybeSingle();
+  return (data as { id: string } | null)?.id ?? null;
+}
+
 export async function listProducts(args: ListProductsArgs = {}) {
   const { filters = {}, sort = "newest", page = 1, pageSize = 12 } = args;
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
+
+  // Resolve slug filters to ids in parallel.
+  const [leagueId, clubId, brandId, seasonId, categoryId, countryId] = await Promise.all([
+    filters.league ? resolveId("leagues", "slug", filters.league) : Promise.resolve(null),
+    filters.club ? resolveId("clubs", "slug", filters.club) : Promise.resolve(null),
+    filters.brand ? resolveId("brands", "slug", filters.brand) : Promise.resolve(null),
+    filters.season ? resolveId("seasons", "label", filters.season) : Promise.resolve(null),
+    filters.category ? resolveId("categories", "slug", filters.category) : Promise.resolve(null),
+    filters.country ? resolveId("countries", "code", filters.country) : Promise.resolve(null),
+  ]);
 
   let q = supabase
     .from("products")
@@ -71,15 +90,12 @@ export async function listProducts(args: ListProductsArgs = {}) {
   if (filters.sale) q = q.eq("is_sale", true);
   if (typeof filters.minPrice === "number") q = q.gte("base_price", filters.minPrice);
   if (typeof filters.maxPrice === "number") q = q.lte("base_price", filters.maxPrice);
-
-  // Slug-based filters via foreign refs need ids; we resolve on server side via .eq on joined columns is not supported,
-  // so we use the `*_id` columns when slug provided by separate lookup. To keep it simple use foreignTable filter syntax:
-  if (filters.league) q = q.eq("leagues.slug" as never, filters.league);
-  if (filters.club) q = q.eq("clubs.slug" as never, filters.club);
-  if (filters.brand) q = q.eq("brands.slug" as never, filters.brand);
-  if (filters.category) q = q.eq("categories.slug" as never, filters.category);
-  if (filters.season) q = q.eq("seasons.label" as never, filters.season);
-  if (filters.country) q = q.eq("countries.code" as never, filters.country);
+  if (leagueId) q = q.eq("league_id", leagueId);
+  if (clubId) q = q.eq("club_id", clubId);
+  if (brandId) q = q.eq("brand_id", brandId);
+  if (seasonId) q = q.eq("season_id", seasonId);
+  if (categoryId) q = q.eq("category_id", categoryId);
+  if (countryId) q = q.eq("country_id", countryId);
 
   switch (sort) {
     case "bestseller":
