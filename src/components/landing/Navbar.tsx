@@ -52,24 +52,48 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Utama">
-          {MENU.map((m) => (
-            <a
-              key={m}
-              href="#"
-              className="text-[13px] font-semibold tracking-wide text-ink/80 transition-colors hover:text-pitch"
-            >
-              {m}
-            </a>
-          ))}
+          {MENU.map((m) => {
+            const to =
+              m === "Beranda"
+                ? "/"
+                : m === "Shop"
+                  ? "/shop"
+                  : m === "Vintage"
+                    ? "/shop?vintage=true"
+                    : m === "Sale"
+                      ? "/shop?sale=true"
+                      : null;
+            if (to) {
+              return (
+                <Link
+                  key={m}
+                  to={to}
+                  className="text-[13px] font-semibold tracking-wide text-ink/80 transition-colors hover:text-pitch"
+                >
+                  {m}
+                </Link>
+              );
+            }
+            return (
+              <a
+                key={m}
+                href="#"
+                className="text-[13px] font-semibold tracking-wide text-ink/80 transition-colors hover:text-pitch"
+              >
+                {m}
+              </a>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <button
+          <Link
+            to="/shop"
             aria-label="Cari"
             className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid"
           >
             <Search size={18} />
-          </button>
+          </Link>
           <button
             aria-label="Wishlist"
             className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid"
@@ -89,15 +113,15 @@ export function Navbar() {
           >
             <ShoppingBag size={18} />
             <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-pitch text-[10px] font-bold text-white">
-              2
+              0
             </span>
           </button>
-          <a
-            href="#shop"
+          <Link
+            to="/shop"
             className="ml-1 hidden h-10 items-center rounded-full bg-ink px-5 text-[13px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-pitch md:inline-flex"
           >
             Belanja Sekarang
-          </a>
+          </Link>
           <button
             aria-label="Buka menu"
             onClick={() => setOpen((o) => !o)}
