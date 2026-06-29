@@ -91,18 +91,28 @@ function AdminDashboard() {
             </span>
           </Link>
           <nav className="space-y-0.5">
-            {NAV.map((n) => (
-              <Link
-                key={n.href}
-                to={n.href}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink/75 transition-colors hover:bg-bone hover:text-ink"
-                activeProps={{ className: "bg-pitch-mist text-pitch-deep" }}
-                activeOptions={{ exact: n.href === "/admin" }}
-              >
-                <n.icon className="h-4 w-4" />
-                {n.label}
-              </Link>
-            ))}
+            {NAV.map((n) => {
+              const isActive = n.href === "/admin";
+              return isActive ? (
+                <Link
+                  key={n.href}
+                  to="/admin"
+                  className="flex items-center gap-3 rounded-lg bg-pitch-mist px-3 py-2.5 text-sm font-medium text-pitch-deep"
+                >
+                  <n.icon className="h-4 w-4" />
+                  {n.label}
+                </Link>
+              ) : (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink/75 transition-colors hover:bg-bone hover:text-ink"
+                >
+                  <n.icon className="h-4 w-4" />
+                  {n.label}
+                </a>
+              );
+            })}
             <button
               onClick={signOut}
               className="mt-4 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink/70 hover:bg-bone hover:text-destructive"
