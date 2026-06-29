@@ -88,12 +88,12 @@ function ShopPage() {
 
   function updateSearch(patch: Record<string, unknown>) {
     navigate({
-      search: (prev) => {
-        const next = { ...prev, ...patch, page: 1 };
+      search: (prev: Record<string, unknown>) => {
+        const next: Record<string, unknown> = { ...prev, ...patch, page: 1 };
         Object.keys(next).forEach((k) => {
-          const v = (next as Record<string, unknown>)[k];
+          const v = next[k];
           if (v === "" || v === undefined || v === false) {
-            delete (next as Record<string, unknown>)[k];
+            delete next[k];
           }
         });
         return next;
