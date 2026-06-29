@@ -150,6 +150,8 @@ function AdminDashboard() {
               <a
                 href="/admin/orders"
                 className="inline-flex h-10 items-center rounded-full border border-border bg-white px-5 text-sm font-semibold text-ink hover:bg-bone"
+              >
+                Lihat Pesanan
               </a>
             </div>
           </section>
