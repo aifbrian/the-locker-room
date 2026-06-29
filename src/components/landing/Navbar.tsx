@@ -4,7 +4,15 @@ import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 
 const MENU = [
-  "Beranda", "Shop", "Liga", "Klub", "Vintage", "New Arrival", "Sale", "Blog", "Tentang",
+  "Beranda",
+  "Shop",
+  "Liga",
+  "Klub",
+  "Vintage",
+  "New Arrival",
+  "Sale",
+  "Blog",
+  "Tentang",
 ];
 
 export function Navbar() {
@@ -30,9 +38,7 @@ export function Navbar() {
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 shadow-[0_1px_0_0_var(--color-border)] backdrop-blur"
-          : "bg-white"
+        scrolled ? "bg-white/95 shadow-[0_1px_0_0_var(--color-border)] backdrop-blur" : "bg-white"
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between gap-6 lg:h-20">
@@ -58,10 +64,16 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <button aria-label="Cari" className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid">
+          <button
+            aria-label="Cari"
+            className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid"
+          >
             <Search size={18} />
           </button>
-          <button aria-label="Wishlist" className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid">
+          <button
+            aria-label="Wishlist"
+            className="hidden h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink md:grid"
+          >
             <Heart size={18} />
           </button>
           <Link
@@ -71,9 +83,14 @@ export function Navbar() {
           >
             <User size={18} />
           </Link>
-          <button aria-label="Keranjang" className="relative grid h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink">
+          <button
+            aria-label="Keranjang"
+            className="relative grid h-10 w-10 place-items-center rounded-full text-ink/70 transition hover:bg-bone hover:text-ink"
+          >
             <ShoppingBag size={18} />
-            <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-pitch text-[10px] font-bold text-white">2</span>
+            <span className="absolute right-1.5 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-pitch text-[10px] font-bold text-white">
+              2
+            </span>
           </button>
           <a
             href="#shop"
@@ -95,9 +112,14 @@ export function Navbar() {
         <div className="border-t border-border bg-white lg:hidden">
           <nav className="container-x flex flex-col py-4">
             {MENU.map((m) => (
-              <a key={m} href="#" className="py-2 text-sm font-semibold text-ink">{m}</a>
+              <a key={m} href="#" className="py-2 text-sm font-semibold text-ink">
+                {m}
+              </a>
             ))}
-            <a href="#shop" className="mt-3 inline-flex h-11 items-center justify-center rounded-full bg-ink px-5 text-sm font-semibold text-white">
+            <a
+              href="#shop"
+              className="mt-3 inline-flex h-11 items-center justify-center rounded-full bg-ink px-5 text-sm font-semibold text-white"
+            >
               Belanja Sekarang
             </a>
           </nav>

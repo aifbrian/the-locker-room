@@ -42,7 +42,9 @@ export function Clubs() {
                 <span className="grid h-20 w-20 place-items-center rounded-full border border-border bg-bone/60 font-display text-sm font-extrabold tracking-wider text-ink/80 transition-all group-hover:-translate-y-1 group-hover:border-pitch group-hover:bg-pitch-mist group-hover:text-pitch-deep sm:h-24 sm:w-24 sm:text-base">
                   {c[0]}
                 </span>
-                <span className="text-center text-[11px] font-medium text-ink/60 group-hover:text-ink">{c[1]}</span>
+                <span className="text-center text-[11px] font-medium text-ink/60 group-hover:text-ink">
+                  {c[1]}
+                </span>
               </a>
             </Reveal>
           ))}

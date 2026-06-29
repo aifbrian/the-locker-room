@@ -18,14 +18,16 @@ export function Hero() {
             <br />
             <span className="relative inline-block">
               <span className="relative z-10">Football</span>
-              <span className="absolute inset-x-0 bottom-1 -z-0 h-4 bg-pitch-mist sm:h-5 lg:h-7" aria-hidden />
+              <span
+                className="absolute inset-x-0 bottom-1 -z-0 h-4 bg-pitch-mist sm:h-5 lg:h-7"
+                aria-hidden
+              />
             </span>{" "}
             Jerseys.
           </h1>
           <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-ink/70 sm:text-lg">
-            Temukan koleksi jersey sepak bola original dari berbagai liga dunia,
-            mulai dari musim terbaru hingga jersey vintage langka yang menjadi
-            incaran para kolektor.
+            Temukan koleksi jersey sepak bola original dari berbagai liga dunia, mulai dari musim
+            terbaru hingga jersey vintage langka yang menjadi incaran para kolektor.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
@@ -49,7 +51,8 @@ export function Hero() {
               ))}
             </div>
             <p className="text-sm text-ink/70">
-              <span className="font-semibold text-ink">Dipercaya ribuan</span> pecinta jersey original di Indonesia
+              <span className="font-semibold text-ink">Dipercaya ribuan</span> pecinta jersey
+              original di Indonesia
             </p>
           </div>
         </div>
@@ -68,7 +71,9 @@ export function Hero() {
               <Badge icon={<ShieldCheck size={14} />} label="Garansi Keaslian" />
             </div>
             <div className="absolute bottom-4 right-4 rounded-xl bg-white/95 px-4 py-3 shadow-lg backdrop-blur">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-pitch">Featured</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-pitch">
+                Featured
+              </p>
               <p className="mt-1 font-display text-sm font-bold text-ink">Season 24/25</p>
               <p className="text-xs text-ink/60">Home & Away Kits</p>
             </div>

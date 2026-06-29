@@ -7,7 +7,9 @@ export function Newsletter() {
         <Reveal>
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-pitch-mist">09 — Newsletter</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-pitch-mist">
+                09 — Newsletter
+              </span>
               <h2 className="mt-4 font-display text-4xl font-extrabold leading-[1.02] tracking-tight sm:text-5xl lg:text-[60px]">
                 Jangan sampai
                 <br /> kehabisan jersey impianmu.
@@ -15,14 +17,16 @@ export function Newsletter() {
             </div>
             <div className="lg:col-span-5">
               <p className="text-white/70">
-                Dapatkan informasi koleksi terbaru, promo eksklusif, dan rilisan
-                jersey langka — langsung ke email kamu.
+                Dapatkan informasi koleksi terbaru, promo eksklusif, dan rilisan jersey langka —
+                langsung ke email kamu.
               </p>
               <form
                 onSubmit={(e) => e.preventDefault()}
                 className="mt-6 flex flex-col gap-2 rounded-full bg-white p-1.5 sm:flex-row"
               >
-                <label htmlFor="email" className="sr-only">Email</label>
+                <label htmlFor="email" className="sr-only">
+                  Email
+                </label>
                 <input
                   id="email"
                   type="email"

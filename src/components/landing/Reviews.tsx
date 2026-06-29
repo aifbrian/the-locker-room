@@ -63,11 +63,16 @@ export function Reviews() {
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-3 border-t border-border pt-5">
                   <span className="grid h-10 w-10 place-items-center rounded-full bg-pitch-mist font-display text-sm font-extrabold text-pitch-deep">
-                    {r.name.split(" ").map((n) => n[0]).join("")}
+                    {r.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-display text-sm font-bold text-ink">{r.name}</p>
-                    <p className="truncate text-xs text-ink/60">{r.city} · {r.item}</p>
+                    <p className="truncate text-xs text-ink/60">
+                      {r.city} · {r.item}
+                    </p>
                   </div>
                   <span className="inline-flex items-center gap-1 rounded-full bg-pitch-mist px-2 py-1 text-[10px] font-bold text-pitch-deep">
                     <BadgeCheck size={12} /> Verified

@@ -24,7 +24,10 @@ export function InstagramGrid() {
                 Tag kami di Instagram dengan #LockerRoomCollector untuk masuk ke galeri kami.
               </p>
             </div>
-            <a href="#" className="inline-flex h-12 items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-ink">
+            <a
+              href="#"
+              className="inline-flex h-12 items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-ink"
+            >
               <Instagram size={16} /> Ikuti kami
             </a>
           </div>
@@ -32,8 +35,16 @@ export function InstagramGrid() {
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {IMGS.map((src, i) => (
             <Reveal key={i} delay={i * 40}>
-              <a href="#" className="group relative block aspect-square overflow-hidden rounded-xl bg-ink">
-                <img src={src} alt="" loading="lazy" className="size-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <a
+                href="#"
+                className="group relative block aspect-square overflow-hidden rounded-xl bg-ink"
+              >
+                <img
+                  src={src}
+                  alt=""
+                  loading="lazy"
+                  className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
                 <span className="absolute inset-0 grid place-items-center bg-ink/0 text-white opacity-0 transition-all duration-300 group-hover:bg-ink/40 group-hover:opacity-100">
                   <Instagram size={20} />
                 </span>

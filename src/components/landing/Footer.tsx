@@ -1,9 +1,27 @@
 import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 
 const COLS = [
-  { title: "Shop", links: ["New Arrival", "Best Seller", "Sale", "Vintage", "Retro", "Liga", "Klub", "Tim Nasional"] },
-  { title: "Bantuan", links: ["FAQ", "Cek Resi", "Kebijakan Retur", "Garansi Keaslian", "Kontak Kami"] },
-  { title: "Perusahaan", links: ["Tentang Kami", "Blog", "Karir", "Kebijakan Privasi", "Syarat & Ketentuan"] },
+  {
+    title: "Shop",
+    links: [
+      "New Arrival",
+      "Best Seller",
+      "Sale",
+      "Vintage",
+      "Retro",
+      "Liga",
+      "Klub",
+      "Tim Nasional",
+    ],
+  },
+  {
+    title: "Bantuan",
+    links: ["FAQ", "Cek Resi", "Kebijakan Retur", "Garansi Keaslian", "Kontak Kami"],
+  },
+  {
+    title: "Perusahaan",
+    links: ["Tentang Kami", "Blog", "Karir", "Kebijakan Privasi", "Syarat & Ketentuan"],
+  },
 ];
 
 export function Footer() {
@@ -21,8 +39,8 @@ export function Footer() {
               </span>
             </a>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink/60">
-              Destinasi jersey sepak bola original di Indonesia. Mulai dari rilisan terbaru
-              hingga vintage langka — terkurasi, terjamin, dan terpercaya.
+              Destinasi jersey sepak bola original di Indonesia. Mulai dari rilisan terbaru hingga
+              vintage langka — terkurasi, terjamin, dan terpercaya.
             </p>
             <div className="mt-6 flex gap-2">
               {[Instagram, Facebook, Twitter, Youtube].map((Icon, i) => (
@@ -47,7 +65,10 @@ export function Footer() {
                 <ul className="mt-5 space-y-3">
                   {c.links.map((l) => (
                     <li key={l}>
-                      <a href="#" className="text-sm text-ink/65 transition-colors hover:text-pitch">
+                      <a
+                        href="#"
+                        className="text-sm text-ink/65 transition-colors hover:text-pitch"
+                      >
                         {l}
                       </a>
                     </li>
@@ -65,7 +86,10 @@ export function Footer() {
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {["QRIS", "Virtual Account", "Transfer Bank", "E-Wallet", "Kartu Kredit"].map((p) => (
-                <span key={p} className="rounded-md border border-border bg-bone/50 px-3 py-1.5 text-xs font-medium text-ink/70">
+                <span
+                  key={p}
+                  className="rounded-md border border-border bg-bone/50 px-3 py-1.5 text-xs font-medium text-ink/70"
+                >
                   {p}
                 </span>
               ))}
@@ -77,7 +101,10 @@ export function Footer() {
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {["JNE", "J&T", "SiCepat", "POS Indonesia", "Ninja Express"].map((p) => (
-                <span key={p} className="rounded-md border border-border bg-bone/50 px-3 py-1.5 text-xs font-medium text-ink/70">
+                <span
+                  key={p}
+                  className="rounded-md border border-border bg-bone/50 px-3 py-1.5 text-xs font-medium text-ink/70"
+                >
                   {p}
                 </span>
               ))}

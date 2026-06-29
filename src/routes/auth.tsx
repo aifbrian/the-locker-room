@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { lovable } from "@/integrations/lovable";
 
 const signInSchema = z.object({
   email: z.string().trim().email("Email tidak valid").max(255),
@@ -23,7 +22,10 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Masuk / Daftar — The Locker Room" },
-      { name: "description", content: "Masuk atau buat akun The Locker Room untuk belanja jersey original." },
+      {
+        name: "description",
+        content: "Masuk atau buat akun The Locker Room untuk belanja jersey original.",
+      },
     ],
   }),
   component: AuthPage,
@@ -79,16 +81,16 @@ function AuthPage() {
 
   async function signInWithGoogle() {
     setLoading(true);
-    const res = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin,
+      },
     });
-    if (res.error) {
-      toast.error("Gagal masuk dengan Google");
+    if (error) {
+      toast.error("Gagal masuk dengan Google: " + error.message);
       setLoading(false);
-      return;
     }
-    if (res.redirected) return;
-    navigate({ to: "/akun", replace: true });
   }
 
   return (
@@ -119,15 +121,25 @@ function AuthPage() {
                 <Label htmlFor="full_name">Nama lengkap</Label>
                 <Input id="full_name" {...form.register("full_name")} className="mt-1.5 h-11" />
                 {form.formState.errors.full_name && (
-                  <p className="mt-1 text-xs text-destructive">{form.formState.errors.full_name.message}</p>
+                  <p className="mt-1 text-xs text-destructive">
+                    {form.formState.errors.full_name.message}
+                  </p>
                 )}
               </div>
             )}
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" autoComplete="email" {...form.register("email")} className="mt-1.5 h-11" />
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                {...form.register("email")}
+                className="mt-1.5 h-11"
+              />
               {form.formState.errors.email && (
-                <p className="mt-1 text-xs text-destructive">{form.formState.errors.email.message}</p>
+                <p className="mt-1 text-xs text-destructive">
+                  {form.formState.errors.email.message}
+                </p>
               )}
             </div>
             <div>
@@ -140,17 +152,24 @@ function AuthPage() {
                 className="mt-1.5 h-11"
               />
               {form.formState.errors.password && (
-                <p className="mt-1 text-xs text-destructive">{form.formState.errors.password.message}</p>
+                <p className="mt-1 text-xs text-destructive">
+                  {form.formState.errors.password.message}
+                </p>
               )}
             </div>
 
-            <Button type="submit" disabled={loading} className="h-11 w-full rounded-full bg-ink text-white hover:bg-pitch">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="h-11 w-full rounded-full bg-ink text-white hover:bg-pitch"
+            >
               {loading ? "Memproses..." : mode === "signin" ? "Masuk" : "Daftar"}
             </Button>
           </form>
 
           <div className="my-6 flex items-center gap-3 text-xs text-ink/50">
-            <span className="h-px flex-1 bg-border" /> atau <span className="h-px flex-1 bg-border" />
+            <span className="h-px flex-1 bg-border" /> atau{" "}
+            <span className="h-px flex-1 bg-border" />
           </div>
 
           <Button

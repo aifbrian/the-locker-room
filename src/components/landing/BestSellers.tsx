@@ -6,10 +6,38 @@ import p3 from "@/assets/product-3.jpg";
 import p4 from "@/assets/product-4.jpg";
 
 const PRODUCTS = [
-  { img: p1, name: "Home Kit — Red Devils", season: "2024 / 2025", price: "Rp 1.299.000", was: "Rp 1.499.000", badge: "Best Seller" },
-  { img: p2, name: "Away Kit — Los Blancos", season: "2024 / 2025", price: "Rp 1.249.000", was: null, badge: "New" },
-  { img: p3, name: "Third Kit — Nerazzurri", season: "2023 / 2024", price: "Rp 999.000", was: "Rp 1.349.000", badge: "Sale" },
-  { img: p4, name: "Home Kit — Die Borussen", season: "2024 / 2025", price: "Rp 1.199.000", was: null, badge: "Original" },
+  {
+    img: p1,
+    name: "Home Kit — Red Devils",
+    season: "2024 / 2025",
+    price: "Rp 1.299.000",
+    was: "Rp 1.499.000",
+    badge: "Best Seller",
+  },
+  {
+    img: p2,
+    name: "Away Kit — Los Blancos",
+    season: "2024 / 2025",
+    price: "Rp 1.249.000",
+    was: null,
+    badge: "New",
+  },
+  {
+    img: p3,
+    name: "Third Kit — Nerazzurri",
+    season: "2023 / 2024",
+    price: "Rp 999.000",
+    was: "Rp 1.349.000",
+    badge: "Sale",
+  },
+  {
+    img: p4,
+    name: "Home Kit — Die Borussen",
+    season: "2024 / 2025",
+    price: "Rp 1.199.000",
+    was: null,
+    badge: "Original",
+  },
 ];
 
 export function BestSellers() {
@@ -24,7 +52,10 @@ export function BestSellers() {
                 Best Sellers.
               </h2>
             </div>
-            <a href="#" className="text-sm font-semibold text-ink underline-offset-4 hover:text-pitch hover:underline">
+            <a
+              href="#"
+              className="text-sm font-semibold text-ink underline-offset-4 hover:text-pitch hover:underline"
+            >
               Lihat semua produk →
             </a>
           </div>
@@ -35,15 +66,26 @@ export function BestSellers() {
             <Reveal key={p.name} delay={i * 60}>
               <article className="group">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-white">
-                  <img src={p.img} alt={p.name} loading="lazy" className="size-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    loading="lazy"
+                    className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
                   <span className="absolute left-3 top-3 rounded-full bg-ink px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
                     {p.badge}
                   </span>
                   <div className="absolute right-3 top-3 flex flex-col gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <button aria-label="Wishlist" className="grid h-9 w-9 place-items-center rounded-full bg-white text-ink shadow-md transition hover:bg-pitch hover:text-white">
+                    <button
+                      aria-label="Wishlist"
+                      className="grid h-9 w-9 place-items-center rounded-full bg-white text-ink shadow-md transition hover:bg-pitch hover:text-white"
+                    >
                       <Heart size={15} />
                     </button>
-                    <button aria-label="Quick view" className="grid h-9 w-9 place-items-center rounded-full bg-white text-ink shadow-md transition hover:bg-pitch hover:text-white">
+                    <button
+                      aria-label="Quick view"
+                      className="grid h-9 w-9 place-items-center rounded-full bg-white text-ink shadow-md transition hover:bg-pitch hover:text-white"
+                    >
                       <Eye size={15} />
                     </button>
                   </div>
@@ -53,8 +95,12 @@ export function BestSellers() {
                 </div>
                 <div className="mt-4 flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-ink/50">{p.season}</p>
-                    <h3 className="mt-1 truncate font-display text-base font-bold text-ink">{p.name}</h3>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-ink/50">
+                      {p.season}
+                    </p>
+                    <h3 className="mt-1 truncate font-display text-base font-bold text-ink">
+                      {p.name}
+                    </h3>
                   </div>
                   <div className="shrink-0 text-right">
                     <p className="font-display text-sm font-extrabold text-ink">{p.price}</p>

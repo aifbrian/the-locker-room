@@ -12,11 +12,7 @@ export function Reveal({
 }) {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <div
-      ref={ref}
-      className={`reveal ${className}`}
-      style={{ animationDelay: `${delay}ms` }}
-    >
+    <div ref={ref} className={`reveal ${className}`} style={{ animationDelay: `${delay}ms` }}>
       {children}
     </div>
   );

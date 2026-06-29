@@ -77,15 +77,22 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { -webkit-font-smoothing: antialiased; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
   }
-  ::selection { background: var(--pitch); color: white; }
+  ::selection {
+    background: var(--pitch);
+    color: white;
+  }
 }
 
 @utility container-x {
@@ -93,14 +100,22 @@
   margin-inline: auto;
   max-width: 1320px;
   padding-inline: 1.25rem;
-  @media (min-width: 768px) { padding-inline: 2rem; }
-  @media (min-width: 1280px) { padding-inline: 2.5rem; }
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+  @media (min-width: 1280px) {
+    padding-inline: 2.5rem;
+  }
 }
 
 @utility section-y {
   padding-block: 4rem;
-  @media (min-width: 768px) { padding-block: 7rem; }
-  @media (min-width: 1280px) { padding-block: 8rem; }
+  @media (min-width: 768px) {
+    padding-block: 7rem;
+  }
+  @media (min-width: 1280px) {
+    padding-block: 8rem;
+  }
 }
 
 @utility hairline {
@@ -117,21 +132,45 @@
 }
 
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.reveal { opacity: 0; }
-.reveal.in-view { animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal {
+  opacity: 0;
+}
+.reveal.in-view {
+  animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
-.marquee-track { animation: marquee 40s linear infinite; }
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
 
 .pitch-grid {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--pitch) 8%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--pitch) 8%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--pitch) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--pitch) 8%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 64px 64px;
 }

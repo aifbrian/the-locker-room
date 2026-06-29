@@ -50,9 +50,16 @@ function AdminDashboard() {
       ]);
       const revenue =
         orders.data
-          ?.filter((o) => ["paid", "processing", "packing", "shipping", "delivered", "completed"].includes(o.status))
+          ?.filter((o) =>
+            ["paid", "processing", "packing", "shipping", "delivered", "completed"].includes(
+              o.status,
+            ),
+          )
           .reduce((sum, o) => sum + Number(o.total), 0) ?? 0;
-      const pending = orders.data?.filter((o) => o.status === "pending_payment" || o.status === "waiting_verification").length ?? 0;
+      const pending =
+        orders.data?.filter(
+          (o) => o.status === "pending_payment" || o.status === "waiting_verification",
+        ).length ?? 0;
       return {
         totalOrders: orders.count ?? 0,
         totalProducts: products.count ?? 0,
@@ -171,7 +178,9 @@ function StatCard({
         : "border-border bg-white text-ink";
   return (
     <div className={`rounded-2xl border p-6 ${accent}`}>
-      <p className={`text-xs font-semibold uppercase tracking-[0.18em] ${tone === "primary" ? "text-white/80" : "text-ink/60"}`}>
+      <p
+        className={`text-xs font-semibold uppercase tracking-[0.18em] ${tone === "primary" ? "text-white/80" : "text-ink/60"}`}
+      >
         {label}
       </p>
       <p className="mt-3 font-display text-3xl font-bold">{value}</p>

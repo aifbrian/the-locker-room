@@ -1,8 +1,16 @@
 import { Reveal } from "./Reveal";
 
 const TEAMS = [
-  "Argentina", "Brazil", "France", "England", "Germany",
-  "Spain", "Portugal", "Italy", "Japan", "Indonesia",
+  "Argentina",
+  "Brazil",
+  "France",
+  "England",
+  "Germany",
+  "Spain",
+  "Portugal",
+  "Italy",
+  "Japan",
+  "Indonesia",
 ];
 
 export function NationalTeams() {
@@ -18,7 +26,10 @@ export function NationalTeams() {
                 <br /> warna bangsa.
               </h2>
             </div>
-            <a href="#" className="text-sm font-semibold text-ink underline-offset-4 hover:text-pitch hover:underline">
+            <a
+              href="#"
+              className="text-sm font-semibold text-ink underline-offset-4 hover:text-pitch hover:underline"
+            >
               Lihat semua tim nasional →
             </a>
           </div>

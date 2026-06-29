@@ -115,9 +115,7 @@ function AccountPage() {
               <Card title="Voucher tersedia" value="0" hint="Lihat penawaran" />
 
               <div className="sm:col-span-2 rounded-2xl border border-border bg-white p-8 text-center">
-                <h2 className="font-display text-xl font-bold text-ink">
-                  Belum ada aktivitas
-                </h2>
+                <h2 className="font-display text-xl font-bold text-ink">Belum ada aktivitas</h2>
                 <p className="mt-2 text-sm text-ink/70">
                   Telusuri koleksi terbaru dan jersey vintage langka kami.
                 </p>

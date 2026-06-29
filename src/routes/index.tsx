@@ -3,7 +3,7 @@ import { AnnouncementBar } from "@/components/landing/AnnouncementBar";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { BrandStrip } from "@/components/landing/BrandStrip";
-import { Categories } from "@/components/landing/Categories";
+import { CuratorsChoice } from "@/components/landing/CuratorsChoice";
 import { BestSellers } from "@/components/landing/BestSellers";
 import { Vintage } from "@/components/landing/Vintage";
 import { Clubs } from "@/components/landing/Clubs";
@@ -46,7 +46,7 @@ function Index() {
       <main id="main">
         <Hero />
         <BrandStrip />
-        <Categories />
+        <CuratorsChoice />
         <BestSellers />
         <Vintage />
         <Clubs />

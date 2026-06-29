@@ -8,10 +8,17 @@ export function Vintage() {
       <div className="container-x grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
         <Reveal className="lg:col-span-7">
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-ink lg:aspect-[5/6]">
-            <img src={img} alt="Jersey vintage langka digantung di ruang ganti" loading="lazy" className="size-full object-cover" />
+            <img
+              src={img}
+              alt="Jersey vintage langka digantung di ruang ganti"
+              loading="lazy"
+              className="size-full object-cover"
+            />
             <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-white">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">Koleksi 1994 – 2004</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
+                  Koleksi 1994 – 2004
+                </p>
                 <p className="font-display text-xl font-extrabold">Heritage Series</p>
               </div>
               <span className="rounded-full bg-gold/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink">
@@ -27,9 +34,9 @@ export function Vintage() {
             Koleksi jersey langka yang memiliki cerita.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-ink/70">
-            Setiap helai jersey vintage di The Locker Room melewati proses kurasi
-            ketat. Kondisi, tahun produksi, hingga keaslian label dijamin —
-            karena bagi kolektor, detail adalah segalanya.
+            Setiap helai jersey vintage di The Locker Room melewati proses kurasi ketat. Kondisi,
+            tahun produksi, hingga keaslian label dijamin — karena bagi kolektor, detail adalah
+            segalanya.
           </p>
           <ul className="mt-8 grid grid-cols-2 gap-4 text-sm">
             {[
