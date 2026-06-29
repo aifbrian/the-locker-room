@@ -140,12 +140,12 @@ export function Navbar() {
                 {m}
               </a>
             ))}
-            <a
-              href="#shop"
+            <Link
+              to="/shop"
               className="mt-3 inline-flex h-11 items-center justify-center rounded-full bg-ink px-5 text-sm font-semibold text-white"
             >
               Belanja Sekarang
-            </a>
+            </Link>
           </nav>
         </div>
       )}
