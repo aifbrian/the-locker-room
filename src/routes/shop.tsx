@@ -200,7 +200,7 @@ function ShopPage() {
               </p>
               <select
                 value={sort}
-                onChange={(e) => navigate({ search: (p) => ({ ...p, sort: e.target.value as ProductSort, page: 1 }) })}
+                onChange={(e) => navigate({ search: (p: Record<string, unknown>) => ({ ...p, sort: e.target.value as ProductSort, page: 1 }) })}
                 className="h-10 rounded-full border border-border bg-white px-4 text-sm font-medium text-ink outline-none focus:border-pitch"
               >
                 {SORT_OPTIONS.map((o) => (
@@ -245,7 +245,7 @@ function ShopPage() {
                     <Link
                       key={pg}
                       to="/shop"
-                      search={(prev) => ({ ...prev, page: pg })}
+                      search={(prev: Record<string, unknown>) => ({ ...prev, page: pg })}
                       className={`grid h-10 min-w-10 place-items-center rounded-full px-3 text-sm font-semibold ${
                         active ? "bg-ink text-white" : "text-ink/70 hover:bg-bone"
                       }`}
